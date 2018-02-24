@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class UIFieldClassObject : MonoBehaviour
 {
+    [SerializeField] ScrollRect scrollView;
     [SerializeField] GameObject uiGroup;
     [SerializeField] GameObject uiClassFieldContentPrefab;
     [SerializeField] GameObject arrowDown;
@@ -35,6 +36,7 @@ public class UIFieldClassObject : MonoBehaviour
     }
     void CreateOpenField()
     {
+        UIUtility.SetActive(scrollView.gameObject, true);
         var i = 3;
         while (i > 0)
         {
@@ -51,6 +53,7 @@ public class UIFieldClassObject : MonoBehaviour
             var tran = uiGroup.transform.GetChild(idx);
             GameObject.Destroy(tran.gameObject);
         }
+        UIUtility.SetActive(scrollView.gameObject, false);
     }
     void UpdateOpenCLoseArrow()
     {
