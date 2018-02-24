@@ -6,13 +6,19 @@ public class UIFieldClassObject : MonoBehaviour
 {
     [SerializeField] GameObject uiGroup;
     [SerializeField] GameObject uiClassFieldContentPrefab;
+    [SerializeField] GameObject arrowDown;
+    [SerializeField] GameObject arrowUp;
     enum FieldStats
     {
         Close,
         Open,
     }
     FieldStats fieldState = FieldStats.Close;
-    public void OnClickClassName()
+    void OnEnable()
+    {
+        UpdateOpenCLoseArrow();
+    }
+    public void OnClickOpenCLoseField()
     {
         switch (fieldState)
         {
@@ -25,7 +31,7 @@ public class UIFieldClassObject : MonoBehaviour
                 fieldState = FieldStats.Close;
                 break;
         }
-
+        UpdateOpenCLoseArrow();
     }
     void CreateOpenField()
     {
@@ -45,5 +51,10 @@ public class UIFieldClassObject : MonoBehaviour
             var tran = uiGroup.transform.GetChild(idx);
             GameObject.Destroy(tran.gameObject);
         }
+    }
+    void UpdateOpenCLoseArrow()
+    {
+        UIUtility.SetActive(arrowDown, fieldState == FieldStats.Close);
+        UIUtility.SetActive(arrowUp, fieldState == FieldStats.Open);
     }
 }
