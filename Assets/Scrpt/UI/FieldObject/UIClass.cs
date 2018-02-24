@@ -2,17 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class UIFieldClassObject : MonoBehaviour
+
+public class UIClass : MonoBehaviour
 {
     [SerializeField] ScrollRect scrollView;
     [SerializeField] GameObject uiGroup;
-    [SerializeField] GameObject uiClassFieldContentPrefab;
+    [SerializeField] GameObject uiClassContentPrefab;
     [SerializeField] GameObject arrowDown;
     [SerializeField] GameObject arrowUp;
+
+    [SerializeField] Text classNameLabel;
+    List<UIClassContent> uiContentList;
+
+    ClassInfo classInfo;
     enum FieldStats
     {
         Close,
         Open,
+    }
+    public void SetUp(ClassInfo info)
+    {
+        this.classInfo = info;
+
+        if (info == null) { return; }
+
+        classNameLabel.text = info.className;
     }
     FieldStats fieldState = FieldStats.Close;
     void OnEnable()
@@ -36,12 +50,21 @@ public class UIFieldClassObject : MonoBehaviour
     }
     void CreateOpenField()
     {
-        UIUtility.SetActive(scrollView.gameObject, true);
-        var i = 3;
-        while (i > 0)
+        if (uiContentList != null && uiContentList.Count > 0)
         {
-            GameObject.Instantiate(uiClassFieldContentPrefab, uiGroup.transform);
-            i--;
+            DestoryCloseField();
+        }
+
+        uiContentList = new List<UIClassContent>();
+        UIUtility.SetActive(scrollView.gameObject, true);
+
+        if (classInfo == null || classInfo.contentList == null) { return; }
+
+        foreach (var content in classInfo.contentList)
+        {
+            var uiContent = UIUtility.InstantiateGetComponent<UIClassContent>(uiClassContentPrefab, uiGroup.transform);
+            uiContent.Setup(content);
+            uiContentList.Add(uiContent);
         }
     }
     void DestoryCloseField()

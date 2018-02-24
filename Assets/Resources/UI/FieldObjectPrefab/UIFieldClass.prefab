@@ -403,10 +403,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 114078651238487184}
   uiGroup: {fileID: 1026384121618706}
-  uiClassFieldContentPrefab: {fileID: 1499963860284318, guid: 6b5e504f85d31469fa6d3497f18c3aa9,
+  uiClassContentPrefab: {fileID: 1499963860284318, guid: 6b5e504f85d31469fa6d3497f18c3aa9,
     type: 2}
   arrowDown: {fileID: 1542137237457632}
   arrowUp: {fileID: 1579674359675014}
+  classNameLabel: {fileID: 114325739953077908}
 --- !u!114 &114355421007487538
 MonoBehaviour:
   m_ObjectHideFlags: 1

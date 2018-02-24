@@ -11,4 +11,24 @@ public class UIUtility
 
         obj.SetActive(state);
     }
+    static public T InstantiateGetComponent<T>(GameObject prefab, Transform parent) where T : class
+    {
+        var go = GameObject.Instantiate(prefab, parent);
+
+        if (go == null) { return null; }
+
+        go.transform.localPosition = Vector3.zero;
+        go.transform.localRotation = Quaternion.identity;
+        go.transform.localScale = Vector3.one;
+
+        var compo = go.GetComponent<T>();
+
+        if (compo == null)
+        {
+            Debug.LogError("no " + typeof(T).ToString() + " in bobject");
+            return null;
+        }
+
+        return compo;
+    }
 }
