@@ -12,14 +12,26 @@ public class UIClass : MonoBehaviour
     [SerializeField] GameObject arrowUp;
 
     [SerializeField] Text classNameLabel;
+    [SerializeField] Image crossArrowImage;
     List<UIClassContent> uiContentList;
-
-    ClassInfo classInfo;
+    public ClassInfo classInfo { get; private set; }
     enum FieldStats
     {
         Close,
         Open,
     }
+    FieldStats fieldState = FieldStats.Close;
+    void OnEnable()
+    {
+        UpdateOpenCLoseArrow();
+    }
+    public void OnDragMoveButton()
+    {
+        var mousePos = CameraInputManeger.Get().GetSingleTouchPostition();
+        var centerOffset = crossArrowImage.transform.position - transform.position;
+        transform.position = mousePos - centerOffset;
+    }
+
     public void SetUp(ClassInfo info)
     {
         this.classInfo = info;
@@ -28,10 +40,19 @@ public class UIClass : MonoBehaviour
 
         classNameLabel.text = info.className;
     }
-    FieldStats fieldState = FieldStats.Close;
-    void OnEnable()
+    // void OnGUI()
+    // {
+    // }
+    // void Update()
+    // {
+
+
+    // }
+    public void OnClickClassTitle()
     {
-        UpdateOpenCLoseArrow();
+        transform.SetAsLastSibling();
+        UIFieldMenu.Get().SelectClass(this);
+
     }
     public void OnClickOpenCLoseField()
     {
