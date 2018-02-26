@@ -6,11 +6,15 @@ public class FieldObjectManager : SingleToneBase<FieldObjectManager>
 {
     [SerializeField] GameObject fieldRoot;
     [SerializeField] UIClass classPrefab;
+    public void CreateClass(string title)
+    {
 
-    public void DebugCreateClass()
+    }
+
+    public void DebugCreateClass(string name)
     {
         var classInfo = new ClassInfo();
-        classInfo.className = "debug class";
+        classInfo.className = name;
 
         classInfo.contentList = new List<ClassContentInfo>
             {
