@@ -25,13 +25,6 @@ public class UIClass : MonoBehaviour
     {
         UpdateOpenCLoseArrow();
     }
-    public void OnDragMoveButton()
-    {
-        var mousePos = CameraInputManeger.Get().GetSingleTouchPostition();
-        var centerOffset = crossArrowImage.transform.position - transform.position;
-        transform.position = mousePos - centerOffset;
-    }
-
     public void SetUp(ClassInfo info)
     {
         this.classInfo = info;
@@ -40,34 +33,11 @@ public class UIClass : MonoBehaviour
 
         classNameLabel.text = info.className;
     }
-    // void OnGUI()
-    // {
-    // }
-    // void Update()
-    // {
-
-
-    // }
-    public void OnClickClassTitle()
+    public void ChangeName(string newName)
     {
-        transform.SetAsLastSibling();
-        UIFieldMenu.Get().SelectClass(this);
-
-    }
-    public void OnClickOpenCLoseField()
-    {
-        switch (fieldState)
-        {
-            case FieldStats.Close:
-                CreateOpenField();
-                fieldState = FieldStats.Open;
-                break;
-            case FieldStats.Open:
-                DestoryCloseField();
-                fieldState = FieldStats.Close;
-                break;
-        }
-        UpdateOpenCLoseArrow();
+        if (classInfo == null) { return; }
+        classInfo.className = newName;
+        classNameLabel.text = newName;
     }
     void CreateOpenField()
     {
@@ -104,4 +74,33 @@ public class UIClass : MonoBehaviour
         UIUtility.SetActive(arrowDown, fieldState == FieldStats.Close);
         UIUtility.SetActive(arrowUp, fieldState == FieldStats.Open);
     }
+    public void OnDragMoveButton()
+    {
+        var mousePos = CameraInputManeger.Get().GetSingleTouchPostition();
+        var centerOffset = crossArrowImage.transform.position - transform.position;
+        transform.position = mousePos - centerOffset;
+    }
+    public void OnClickClassTitle()
+    {
+        transform.SetAsLastSibling();
+        UIFieldMenu.Get().SelectClass(this);
+
+    }
+    public void OnClickOpenCLoseField()
+    {
+        switch (fieldState)
+        {
+            case FieldStats.Close:
+                CreateOpenField();
+                fieldState = FieldStats.Open;
+                break;
+            case FieldStats.Open:
+                DestoryCloseField();
+                fieldState = FieldStats.Close;
+                break;
+        }
+        UpdateOpenCLoseArrow();
+    }
+
+
 }
