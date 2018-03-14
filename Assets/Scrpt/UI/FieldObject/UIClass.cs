@@ -14,7 +14,7 @@ public class UIClass : MonoBehaviour
     [SerializeField] Text classNameLabel;
     [SerializeField] Image crossArrowImage;
     List<UIClassContent> uiContentList;
-    public ClassInfo classInfo { get; private set; }
+    public BaseClassInfo classInfo { get; private set; }
     enum FieldStats
     {
         Close,
@@ -25,18 +25,18 @@ public class UIClass : MonoBehaviour
     {
         UpdateOpenCLoseArrow();
     }
-    public void SetUp(ClassInfo info)
+    public void SetUp(BaseClassInfo info)
     {
         this.classInfo = info;
 
         if (info == null) { return; }
 
-        classNameLabel.text = info.className;
+        classNameLabel.text = info.ObjectName;
     }
     public void ChangeName(string newName)
     {
         if (classInfo == null) { return; }
-        classInfo.className = newName;
+        classInfo.ObjectName = newName;
         classNameLabel.text = newName;
     }
     void CreateOpenField()

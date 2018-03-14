@@ -7,7 +7,7 @@ public enum ClassContentType
 	Variable,
 	Function,
 }
-public class ClassContentInfo : FieldObjectBase
+public class ClassContentInfo : FieldObjectDataBase
 {
 	ClassContentType contentType;
 	public string contentName;

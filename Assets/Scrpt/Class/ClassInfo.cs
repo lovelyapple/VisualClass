@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClassInfo : FieldObjectBase
+public class BaseClassInfo : FieldObjectDataBase
 {
-    public ClassInfo parentInfo { get; private set; }
-    public ClassInfo childInfo { get; private set; }
-    public string className;
+    public override FIELD_OBJECT_TYPE FieldObjectType { get { return FIELD_OBJECT_TYPE.BaseClass; } }
     public List<ClassContentInfo> contentList;
-	
+    public void ClearClassInfo()
+    {
+        //todo 中身にそれぞれの変数の登録先を解除する必要がある
+    }
 }

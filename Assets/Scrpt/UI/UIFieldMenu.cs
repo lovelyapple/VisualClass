@@ -15,7 +15,7 @@ public class UIFieldMenu : WindowBase
         {
             if (!string.IsNullOrEmpty(str))
             {
-                FieldObjectManager.Get().DebugCreateClass(str);
+                FieldObjectManager.Get().CreateClass(str);
             }
         });
     }
@@ -51,7 +51,7 @@ public class UIFieldMenu : WindowBase
     public void SelectClass(UIClass uiClass)
     {
         ReleaseSelected();
-        slelectedObjName.text = uiClass.classInfo.className;
+        slelectedObjName.text = uiClass.classInfo.ObjectName;
         selectedUIClass = uiClass;
         actionMode = ActionMode.Class;
         UIUtility.SetActive(classActionButonGroup.gameObject, true);
@@ -108,7 +108,12 @@ public class UIFieldMenu : WindowBase
     }
     public void OnClickAddNewVariable()
     {
+        if (selectedUIClass == null)
+        {
+            return;
+        }
 
+        
     }
     public void OnClickAddNewFunction()
     {
