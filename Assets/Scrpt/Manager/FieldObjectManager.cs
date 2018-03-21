@@ -47,7 +47,6 @@ public class FieldObjectManager : SingleToneBase<FieldObjectManager>
     /// 済みなら、再登録、なければ新しくつくる
     public bool CreateClass(string title)
     {
-
         for (uint i = 0; i < maxClass; ++i)
         {
             BaseClassInfo info;

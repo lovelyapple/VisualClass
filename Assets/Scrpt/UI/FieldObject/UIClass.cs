@@ -7,14 +7,14 @@ public class UIClass : MonoBehaviour
 {
     [SerializeField] ScrollRect scrollView;
     [SerializeField] GameObject uiGroup;
-    [SerializeField] GameObject uiClassContentPrefab;
+    [SerializeField] UIClassVariable baseVairablePrefab;
     [SerializeField] GameObject arrowDown;
     [SerializeField] GameObject arrowUp;
 
     [SerializeField] Text classNameLabel;
     [SerializeField] Image crossArrowImage;
-    List<UIClassContent> uiContentList;
     public BaseClassInfo classInfo { get; private set; }
+    public Dictionary<ulong, UIFieldObjectBase> classFieldObjectDict = new Dictionary<ulong, UIFieldObjectBase>();
     enum FieldStats
     {
         Close,
@@ -36,27 +36,13 @@ public class UIClass : MonoBehaviour
     public void ChangeName(string newName)
     {
         if (classInfo == null) { return; }
+
         classInfo.ObjectName = newName;
         classNameLabel.text = newName;
     }
     void CreateOpenField()
     {
-        if (uiContentList != null && uiContentList.Count > 0)
-        {
-            DestoryCloseField();
-        }
-
-        uiContentList = new List<UIClassContent>();
-        UIUtility.SetActive(scrollView.gameObject, true);
-
-        if (classInfo == null || classInfo.contentList == null) { return; }
-
-        foreach (var content in classInfo.contentList)
-        {
-            var uiContent = UIUtility.InstantiateGetComponent<UIClassContent>(uiClassContentPrefab, uiGroup.transform);
-            uiContent.Setup(content);
-            uiContentList.Add(uiContent);
-        }
+        UIUtility.SetActive(scrollView.gameObject, fieldState == FieldStats.Open);
     }
     void DestoryCloseField()
     {
@@ -74,6 +60,52 @@ public class UIClass : MonoBehaviour
         UIUtility.SetActive(arrowDown, fieldState == FieldStats.Close);
         UIUtility.SetActive(arrowUp, fieldState == FieldStats.Open);
     }
+    //
+    // 削除
+    //
+    public void DeleteClassFieldObject(FieldObjectDataBase obj)
+    {
+        UIFieldObjectBase deleteTarget;
+
+        if (!classFieldObjectDict.TryGetValue(obj.SerialId.Value, out deleteTarget))
+        {
+            Debug.LogError("削除したいものが見つからない,見つからない");
+            return;
+        }
+
+        if (!classInfo.RemoveObjectInfo(obj))
+        {
+            //donoth
+        }
+    }
+    //
+    // 追加
+    //
+    public void CreateBaseVariable(string name)
+    {
+        if (classInfo == null)
+        {
+            Debug.LogError("CreateBaseVariable clasInfo がnull");
+            return;
+        }
+
+        var newVariable = classInfo.AddNewBaseVariable(name);
+
+        if (newVariable == null)
+        {
+            Debug.LogError("newVariable = null");
+            return;
+        }
+
+        var co = UIUtility.InstantiateGetComponent<UIClassVariable>(baseVairablePrefab.gameObject, uiGroup.transform);
+        co.Setup(newVariable);
+
+        classFieldObjectDict.Add(newVariable.SerialId.Value, co);
+    }
+
+    //
+    //操作系
+    //
     public void OnDragMoveButton()
     {
         var mousePos = CameraInputManeger.Get().GetSingleTouchPostition();
@@ -91,14 +123,13 @@ public class UIClass : MonoBehaviour
         switch (fieldState)
         {
             case FieldStats.Close:
-                CreateOpenField();
                 fieldState = FieldStats.Open;
                 break;
             case FieldStats.Open:
-                DestoryCloseField();
                 fieldState = FieldStats.Close;
                 break;
         }
+        CreateOpenField();
         UpdateOpenCLoseArrow();
     }
 

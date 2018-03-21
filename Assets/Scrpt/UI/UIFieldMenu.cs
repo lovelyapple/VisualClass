@@ -30,16 +30,16 @@ public class UIFieldMenu : WindowBase
         Function,
     }
     ActionMode actionMode;
-    [SerializeField] Text slelectedObjName;
+    [SerializeField] Text selectedObjName;
 
     [SerializeField] GameObject classActionButonGroup;
     [SerializeField] GameObject variableActionButtonGroup;
     [SerializeField] GameObject functionActionButtonGroup;
 
     public UIClass selectedUIClass { get; private set; }
-    public UIClassContent selectetedContent { get; private set; }
-    public bool IsSelectedCLass { get { return selectedUIClass != null; } }
-    public bool IsSelectedContent { get { return selectetedContent != null; } }
+    public bool IsSelectedClass { get { return selectedUIClass != null; } }
+    public UIClassVariable selectedUIClassVariable { get; private set; }
+    public bool IsSelectedClassVariable { get { return selectedUIClassVariable != null; } }
     static public UIFieldMenu Get()
     {
         return WindowManager.GetWindow(WindowIndex.FieldMenu) as UIFieldMenu;
@@ -51,17 +51,18 @@ public class UIFieldMenu : WindowBase
     public void SelectClass(UIClass uiClass)
     {
         ReleaseSelected();
-        slelectedObjName.text = uiClass.classInfo.ObjectName;
+        selectedObjName.text = uiClass.classInfo.ObjectName;
         selectedUIClass = uiClass;
         actionMode = ActionMode.Class;
         UIUtility.SetActive(classActionButonGroup.gameObject, true);
         UIUtility.SetActive(variableActionButtonGroup.gameObject, false);
         UIUtility.SetActive(functionActionButtonGroup.gameObject, false);
     }
-    public void SelectClassVariable(UIClassContent uiContent)
+    public void SelectVariable(UIClassVariable uiVariable)
     {
         ReleaseSelected();
-        selectetedContent = uiContent;
+        selectedObjName.text = uiVariable.variableInfo.ObjectName;
+        selectedUIClassVariable = uiVariable;
         actionMode = ActionMode.Variable;
         UIUtility.SetActive(classActionButonGroup.gameObject, false);
         UIUtility.SetActive(variableActionButtonGroup.gameObject, true);
@@ -70,9 +71,8 @@ public class UIFieldMenu : WindowBase
     public void ReleaseSelected()
     {
         selectedUIClass = null;
-        selectetedContent = null;
         actionMode = ActionMode.Noth;
-        slelectedObjName.text = "noth selected";
+        selectedObjName.text = "noth selected";
         UIUtility.SetActive(classActionButonGroup.gameObject, false);
         UIUtility.SetActive(variableActionButtonGroup.gameObject, false);
         UIUtility.SetActive(functionActionButtonGroup.gameObject, false);
@@ -88,11 +88,16 @@ public class UIFieldMenu : WindowBase
                 strUpdate = (s) =>
                 {
                     selectedUIClass.ChangeName(s);
-                    slelectedObjName.text = s;
+                    selectedObjName.text = s;
                 };
                 break;
             case ActionMode.Variable:
                 titleStr = "変数の名前を入力してください。";
+                strUpdate = (s) =>
+                {
+                    selectedUIClassVariable.ChangeName(s);
+                    selectedObjName.text = s;
+                };
                 break;
             case ActionMode.Function:
                 titleStr = "メソッドの名前を入力して下さい。";
@@ -113,7 +118,10 @@ public class UIFieldMenu : WindowBase
             return;
         }
 
-        
+        CommonManager.OpenInputWindow("新しい変数の名前を入力してください", (str) =>
+        {
+            selectedUIClass.CreateBaseVariable(str);
+        });
     }
     public void OnClickAddNewFunction()
     {
