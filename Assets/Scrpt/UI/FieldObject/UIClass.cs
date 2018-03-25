@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIClass : MonoBehaviour
+public class UIClass : UIFieldObjectBase
 {
+    public override FIELD_OBJECT_TYPE FieldObjectType { get { return FIELD_OBJECT_TYPE.BaseClass; } }
     [SerializeField] ScrollRect scrollView;
     [SerializeField] GameObject uiGroup;
     [SerializeField] UIClassVariable baseVairablePrefab;
+    [SerializeField] UIClassFunction baseFunctionPrefab;
     [SerializeField] GameObject arrowDown;
     [SerializeField] GameObject arrowUp;
 
@@ -32,6 +34,7 @@ public class UIClass : MonoBehaviour
         if (info == null) { return; }
 
         classNameLabel.text = info.ObjectName;
+        showingSerial = info.SerialId.Value;
     }
     public void ChangeName(string newName)
     {
@@ -101,6 +104,27 @@ public class UIClass : MonoBehaviour
         co.Setup(newVariable);
 
         classFieldObjectDict.Add(newVariable.SerialId.Value, co);
+    }
+    public void CreateBaseFuction(string name)
+    {
+        if (classInfo == null)
+        {
+            Debug.LogError("CreateBaseVariable clasInfo がnull");
+            return;
+        }
+
+        var newFunction = classInfo.AddNewBaseFuction(name);
+
+        if (newFunction == null)
+        {
+            Debug.LogError("newFunction = null");
+            return;
+        }
+
+        var co = UIUtility.InstantiateGetComponent<UIClassFunction>(baseFunctionPrefab.gameObject, uiGroup.transform);
+        co.Setup(newFunction);
+
+        classFieldObjectDict.Add(newFunction.SerialId.Value, co);
     }
 
     //

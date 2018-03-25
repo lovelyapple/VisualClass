@@ -28,6 +28,7 @@ public class UIClassVariable : UIFieldObjectBase
         }
 
         variableNameLabel.text = info.ObjectName;
+        showingSerial = info.SerialId.Value;
         UIUtility.SetActive(this.gameObject, true);
     }
     public void ChangeName(string newName)

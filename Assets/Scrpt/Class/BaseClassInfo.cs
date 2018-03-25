@@ -26,7 +26,7 @@ public class BaseClassInfo : FieldObjectDataBase
         {
             if (classFieldObjectInfoDict[FIELD_OBJECT_TYPE.BaseVariable].ContainsKey(i))
             {
-                Debug.LogError("すでに含まれているidx " + i);
+                //Debug.LogError("すでに含まれているidx " + i);
                 continue;
             }
 
@@ -41,6 +41,33 @@ public class BaseClassInfo : FieldObjectDataBase
 
         return null;
     }
+    //これって、毎回idxを検索しているので、csvから生成されるときに、面倒いな
+    public BaseFunctionInfo AddNewBaseFuction(string name)
+    {
+        if (!classFieldObjectInfoDict.ContainsKey(FIELD_OBJECT_TYPE.BaseFunction))
+        {
+            classFieldObjectInfoDict.Add(FIELD_OBJECT_TYPE.BaseFunction, new Dictionary<ulong, FieldObjectDataBase>());
+        }
+
+        for (uint i = 0; i < maxVariableAmount; ++i)
+        {
+            if (classFieldObjectInfoDict[FIELD_OBJECT_TYPE.BaseFunction].ContainsKey(i))
+            {
+                Debug.LogError("すでに含まれているidx " + i);
+                continue;
+            }
+
+            var newInfo = new BaseFunctionInfo();
+
+            var serial = FieldObjectDataBase.ConvertToSerial(this, FIELD_OBJECT_TYPE.BaseFunction, i);
+            newInfo.Setup(this, serial, name);
+            classFieldObjectInfoDict[FIELD_OBJECT_TYPE.BaseFunction].Add(i, newInfo);
+
+            return newInfo;
+        }
+
+        return null;
+    }
     public bool RemoveObjectInfo(FieldObjectDataBase info)
     {
         var type = info.FieldObjectType;
@@ -48,7 +75,7 @@ public class BaseClassInfo : FieldObjectDataBase
 
         if (!classFieldObjectInfoDict.ContainsKey(type))
         {
-            Debug.LogError("RemoveObjectInfo そのtypeが登録されていない" + type);
+            //Debug.LogError("RemoveObjectInfo そのtypeが登録されていない" + type);
             return false;
         }
 

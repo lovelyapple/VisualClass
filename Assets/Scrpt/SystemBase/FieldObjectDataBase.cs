@@ -27,6 +27,7 @@ public enum FIELD_OBJECT_TYPE
 }
 public class FieldObjectDataBase
 {
+    [SerializeField] ulong serialIdShowing;
     public ulong? SerialId { get; set; }//Field上に一意性を持つID
     public ulong? FriendSerialId { get; set; }//フレンドObjectID
     public FieldObjectDataBase ParentObjectData;//親情報
@@ -35,13 +36,15 @@ public class FieldObjectDataBase
     public List<ulong> ConnectFromList;//引用元
     public List<ulong> ConnectToList;//引用先
     public string ObjectName;
+    public const int classIdArea = 1000000;
+    public const int fieldObjTypeIDArea = 10000;
 
     public uint? ClassId
     {
         get
         {
             if (!SerialId.HasValue) { return null; }
-            return (uint)(SerialId.Value / 1000000);
+            return (uint)(SerialId.Value / classIdArea);
         }
     }
     public uint? FieldSerialId
@@ -49,7 +52,7 @@ public class FieldObjectDataBase
         get
         {
             if (!SerialId.HasValue) { return null; }
-            return (uint)(SerialId.Value % 10000);
+            return (uint)(SerialId.Value % fieldObjTypeIDArea);
         }
     }
     public void SetupName(string name)
@@ -68,6 +71,6 @@ public class FieldObjectDataBase
             return 0;
         }
 
-        return classInfo.SerialId.Value + (uint)type * 1000000 + idx;
+        return classInfo.SerialId.Value + (uint)type * fieldObjTypeIDArea + idx;
     }
 }
