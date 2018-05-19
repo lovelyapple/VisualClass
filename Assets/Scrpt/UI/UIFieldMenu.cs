@@ -35,6 +35,7 @@ public class UIFieldMenu : WindowBase
     [SerializeField] GameObject classActionButonGroup;
     [SerializeField] GameObject variableActionButtonGroup;
     [SerializeField] GameObject functionActionButtonGroup;
+    [SerializeField] GameObject functionArgumentActionButtonGroup;
 
     public UIClass selectedUIClass { get; private set; }
     public bool IsSelectedClass { get { return selectedUIClass != null; } }
@@ -58,8 +59,6 @@ public class UIFieldMenu : WindowBase
         selectedUIClass = uiClass;
         actionMode = ActionMode.Class;
         UIUtility.SetActive(classActionButonGroup.gameObject, true);
-        UIUtility.SetActive(variableActionButtonGroup.gameObject, false);
-        UIUtility.SetActive(functionActionButtonGroup.gameObject, false);
     }
     public void SelectVariable(UIClassVariable uiVariable)
     {
@@ -67,9 +66,7 @@ public class UIFieldMenu : WindowBase
         selectedObjName.text = uiVariable.variableInfo.ObjectName;
         selectedUIClassVariable = uiVariable;
         actionMode = ActionMode.Variable;
-        UIUtility.SetActive(classActionButonGroup.gameObject, false);
         UIUtility.SetActive(variableActionButtonGroup.gameObject, true);
-        UIUtility.SetActive(functionActionButtonGroup.gameObject, false);
     }
     public void SelectFuction(UIClassFunction uiFuction)
     {
@@ -77,8 +74,6 @@ public class UIFieldMenu : WindowBase
         selectedObjName.text = uiFuction.functionInfo.ObjectName;
         selectedUIFunction = uiFuction;
         actionMode = ActionMode.Function;
-        UIUtility.SetActive(classActionButonGroup.gameObject, false);
-        UIUtility.SetActive(variableActionButtonGroup.gameObject, false);
         UIUtility.SetActive(functionActionButtonGroup.gameObject, true);
     }
     public void ReleaseSelected()
@@ -91,6 +86,7 @@ public class UIFieldMenu : WindowBase
         UIUtility.SetActive(classActionButonGroup.gameObject, false);
         UIUtility.SetActive(variableActionButtonGroup.gameObject, false);
         UIUtility.SetActive(functionActionButtonGroup.gameObject, false);
+        UIUtility.SetActive(functionArgumentActionButtonGroup.gameObject, false);
     }
     public void OnClickChangeName()
     {

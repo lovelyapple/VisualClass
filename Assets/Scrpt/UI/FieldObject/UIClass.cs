@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIClass : UIFieldObjectBase
 {
     public override FIELD_OBJECT_TYPE FieldObjectType { get { return FIELD_OBJECT_TYPE.BaseClass; } }
-    [SerializeField] ScrollRect scrollView;
+    [SerializeField] ScrollRect fieldScrollView;
     [SerializeField] GameObject uiGroup;
     [SerializeField] UIClassVariable baseVairablePrefab;
     [SerializeField] UIClassFunction baseFunctionPrefab;
@@ -15,6 +15,7 @@ public class UIClass : UIFieldObjectBase
 
     [SerializeField] Text classNameLabel;
     [SerializeField] Image crossArrowImage;
+
     public BaseClassInfo classInfo { get; private set; }
     public Dictionary<ulong, UIFieldObjectBase> classFieldObjectDict = new Dictionary<ulong, UIFieldObjectBase>();
     enum FieldStats
@@ -31,7 +32,11 @@ public class UIClass : UIFieldObjectBase
     {
         this.classInfo = info;
 
-        if (info == null) { return; }
+        if (info == null)
+        {
+            return;
+        }
+
 
         classNameLabel.text = info.ObjectName;
         showingSerial = info.SerialId.Value;
@@ -45,7 +50,7 @@ public class UIClass : UIFieldObjectBase
     }
     void CreateOpenField()
     {
-        UIUtility.SetActive(scrollView.gameObject, fieldState == FieldStats.Open);
+        UIUtility.SetActive(fieldScrollView.gameObject, fieldState == FieldStats.Open);
     }
     void DestoryCloseField()
     {
@@ -56,7 +61,7 @@ public class UIClass : UIFieldObjectBase
             var tran = uiGroup.transform.GetChild(idx);
             GameObject.Destroy(tran.gameObject);
         }
-        UIUtility.SetActive(scrollView.gameObject, false);
+        UIUtility.SetActive(fieldScrollView.gameObject, false);
     }
     void UpdateOpenCLoseArrow()
     {
@@ -76,10 +81,10 @@ public class UIClass : UIFieldObjectBase
             return;
         }
 
-        if (!classInfo.RemoveObjectInfo(obj))
-        {
-            //donoth
-        }
+        // if (!classInfo.RemoveObjectInfo(obj))
+        // {
+        //     //donoth
+        // }
     }
     //
     // 追加
@@ -92,18 +97,12 @@ public class UIClass : UIFieldObjectBase
             return;
         }
 
-        var newVariable = classInfo.AddNewBaseVariable(name);
-
-        if (newVariable == null)
+        classInfo.AddNewBaseVariable(name, (arg) =>
         {
-            Debug.LogError("newVariable = null");
-            return;
-        }
-
-        var co = UIUtility.InstantiateGetComponent<UIClassVariable>(baseVairablePrefab.gameObject, uiGroup.transform);
-        co.Setup(newVariable);
-
-        classFieldObjectDict.Add(newVariable.SerialId.Value, co);
+            var co = UIUtility.InstantiateGetComponent<UIClassVariable>(baseVairablePrefab.gameObject, uiGroup.transform);
+            co.Setup(arg);
+            classFieldObjectDict.Add(co.variableInfo.SerialId.Value, co);
+        });
     }
     public void CreateBaseFuction(string name)
     {
@@ -113,19 +112,14 @@ public class UIClass : UIFieldObjectBase
             return;
         }
 
-        var newFunction = classInfo.AddNewBaseFuction(name);
-
-        if (newFunction == null)
+        classInfo.AddNewBaseFuction(name, (arg) =>
         {
-            Debug.LogError("newFunction = null");
-            return;
-        }
-
-        var co = UIUtility.InstantiateGetComponent<UIClassFunction>(baseFunctionPrefab.gameObject, uiGroup.transform);
-        co.Setup(newFunction);
-
-        classFieldObjectDict.Add(newFunction.SerialId.Value, co);
+            var co = UIUtility.InstantiateGetComponent<UIClassFunction>(baseFunctionPrefab.gameObject, uiGroup.transform);
+            co.Setup(arg);
+            classFieldObjectDict.Add(arg.SerialId.Value, co);
+        });
     }
+
 
     //
     //操作系
@@ -156,6 +150,4 @@ public class UIClass : UIFieldObjectBase
         CreateOpenField();
         UpdateOpenCLoseArrow();
     }
-
-
 }

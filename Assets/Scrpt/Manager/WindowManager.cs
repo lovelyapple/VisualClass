@@ -17,7 +17,7 @@ public class WindowManager : SingleToneBase<WindowManager>
     Dictionary<WindowIndex, string> windowPathDict = new Dictionary<WindowIndex, string>()
     {
         {WindowIndex.FieldMenu,"UI/Window/Part_FieldMenu/FieldMenu"},
-        {WindowIndex.CommonInoutWindow, "UI/Window/Part_CommonInputWindow/CommonInputWindow"},
+        {WindowIndex.CommonInoutWindow, "UI/Window/Part_CommonInput/CommonInputWindow"},
     };
 
     //サイズ分確保

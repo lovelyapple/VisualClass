@@ -55,8 +55,7 @@ public class FieldObjectManager : SingleToneBase<FieldObjectManager>
             if (info == null)
             {
                 info = new BaseClassInfo();
-                info.SetupName(title);
-                info.SetupSerialId((uint)(i * 1000000));
+                info.Setup(title, FieldObjectDataBase.CreateBaseClassSerial(i));
                 classInfoDict[i] = info;
 
                 UIClass uiClass;
