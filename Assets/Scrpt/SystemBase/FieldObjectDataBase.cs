@@ -35,7 +35,7 @@ public class FieldObjectDataBase
     public FieldObjectDataBase ParentObjectData;//親情報
     public FieldObjectDataBase ChildObjectData;//子情報
     public List<ulong> ConnectFromList = new List<ulong>();//引用元
-    public List<ulong> ConnectToList;//引用先
+    public List<ulong> ConnectToList = new List<ulong>();//引用先
     public string ObjectName;
     public const int ClassIdArea = 1000000;
     public const int FieldObjTypeIDArea = 10000;
@@ -91,7 +91,29 @@ public class FieldObjectDataBase
         this.ObjectName = name;
         this.SerialId = serial;
     }
+    //
+    // 接続 なんか危ない気がする
+    //
+    public void AddConnectFrom(FieldObjectDataBase objData)
+    {
+        var serial = objData.SerialId.Value;
+        if (ConnectFromList.Contains(serial))
+        {
+            Debug.LogWarning("すでに接続しているオブジェクトです " + serial);
+        }
 
+        ConnectFromList.Add(serial);
+    }
+    public void AddConnectTo(FieldObjectDataBase objData)
+    {
+        var serial = objData.SerialId.Value;
+        if (ConnectToList.Contains(serial))
+        {
+            Debug.LogWarning("すでに接続しているオブジェクトです " + serial);
+        }
+
+        ConnectToList.Add(serial);
+    }
     //
     // world serial に変換
     //

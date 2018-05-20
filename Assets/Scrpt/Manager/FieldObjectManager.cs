@@ -6,6 +6,24 @@ public class FieldObjectManager : SingleToneBase<FieldObjectManager>
 {
     [SerializeField] GameObject fieldRoot;
     [SerializeField] UIClass classPrefab;
+    [SerializeField] ContentSizeAnalyser contentSizeAnalyser;
+    public ContentSizeAnalyser ContentSizeAnalyser
+    {
+        get
+        {
+            if (contentSizeAnalyser == null)
+            {
+                contentSizeAnalyser = this.gameObject.GetComponent<ContentSizeAnalyser>();
+
+                if (contentSizeAnalyser == null)
+                {
+                    Debug.LogError("contentSizeAnalyser is null");
+                }
+            }
+
+            return contentSizeAnalyser;
+        }
+    }
     int maxClass = 100;
 
     Dictionary<uint, BaseClassInfo> classInfoDict;

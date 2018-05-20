@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+[RequireComponent(typeof(RectTransform))]
 public class UIClass : UIFieldObjectBase
 {
     public override FIELD_OBJECT_TYPE FieldObjectType { get { return FIELD_OBJECT_TYPE.BaseClass; } }
+    [SerializeField] RectTransform rectTransform;
     [SerializeField] ScrollRect fieldScrollView;
     [SerializeField] GameObject uiGroup;
     [SerializeField] UIClassVariable baseVairablePrefab;
@@ -27,6 +28,16 @@ public class UIClass : UIFieldObjectBase
     void OnEnable()
     {
         UpdateOpenCLoseArrow();
+    }
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    void Awake()
+    {
+        if (rectTransform == null)
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
     }
     public void SetUp(BaseClassInfo info)
     {
@@ -129,6 +140,10 @@ public class UIClass : UIFieldObjectBase
         var mousePos = CameraInputManeger.Get().GetSingleTouchPostition();
         var centerOffset = crossArrowImage.transform.position - transform.position;
         transform.position = mousePos - centerOffset;
+    }
+    public void OnDragOver()
+    {
+        FieldObjectManager.Get().ContentSizeAnalyser.UpdateRectSingle(this.rectTransform);
     }
     public void OnClickClassTitle()
     {
